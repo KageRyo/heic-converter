@@ -2,8 +2,10 @@ import { useState, useRef } from "react";
 import "./App.css";
 import { convertHeic } from "./converter";
 import type { OutputFormat, ConversionResult } from "./converter";
+import { useTranslation } from "react-i18next";
 
 function App() {
+  const { t, i18n } = useTranslation();
   const [files, setFiles] = useState<File[]>([]);
   const [format, setFormat] = useState<OutputFormat>("image/jpeg");
   const [quality, setQuality] = useState<number>(0.9);
@@ -25,7 +27,7 @@ function App() {
       
       const invalidCount = selectedFiles.length - validFiles.length;
       if (invalidCount > 0) {
-        setErrors(prev => [...prev, `${invalidCount} unsupported files skipped. Only .heic and .heif are supported.`]);
+        setErrors(prev => [...prev, t("unsupported_skipped", { count: invalidCount })]);
       }
       
       setFiles(validFiles);
@@ -76,25 +78,38 @@ function App() {
     }
   };
 
+  const toggleLanguage = () => {
+    const nextLang = i18n.language === "en" ? "zh-TW" : "en";
+    i18n.changeLanguage(nextLang);
+  };
+
   return (
     <div className="container">
       <header>
-        <h1>HEIC Converter</h1>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <h1>{t("title")}</h1>
+          <button 
+            onClick={toggleLanguage} 
+            style={{ padding: "0.4rem 0.8rem", fontSize: "0.8rem", backgroundColor: "#f0f0f0", color: "#333" }}
+          >
+            {i18n.language === "en" ? "繁體中文" : "English"}
+          </button>
+        </div>
         <div className="privacy-note">
-          <strong>Privacy First:</strong> All conversions happen locally in your browser. No images are uploaded to any server.
+          <strong>{t("privacy_note")}</strong> {t("privacy_desc")}
         </div>
       </header>
 
       <main className="controls">
         <div className="control-group">
-          <label>Select HEIC/HEIF Files</label>
+          <label>{t("select_files")}</label>
           <div 
             className="file-input-wrapper"
             onClick={() => fileInputRef.current?.click()}
           >
             {files.length > 0 
-              ? `${files.length} file(s) selected` 
-              : "Click to select or drag and drop .heic / .heif files"
+              ? t("files_selected", { count: files.length })
+              : t("drop_hint")
             }
             <input 
               type="file" 
@@ -109,7 +124,7 @@ function App() {
 
         <div className="settings">
           <div className="control-group">
-            <label htmlFor="format">Output Format</label>
+            <label htmlFor="format">{t("output_format")}</label>
             <select 
               id="format"
               value={format} 
@@ -123,7 +138,7 @@ function App() {
 
           {format === "image/jpeg" && (
             <div className="control-group">
-              <label htmlFor="quality">JPG Quality: {quality.toFixed(1)}</label>
+              <label htmlFor="quality">{t("jpg_quality", { quality: quality.toFixed(1) })}</label>
               <input 
                 id="quality"
                 type="range" 
@@ -143,14 +158,14 @@ function App() {
             onClick={startConversion} 
             disabled={files.length === 0 || isConverting}
           >
-            {isConverting ? "Converting..." : `Convert ${files.length} File${files.length !== 1 ? 's' : ''}`}
+            {isConverting ? t("converting") : t("convert_button", { count: files.length })}
           </button>
           <button 
             onClick={clearAll} 
             disabled={isConverting || (files.length === 0 && results.length === 0)}
             style={{ marginLeft: "1rem", backgroundColor: "#6c757d" }}
           >
-            Clear
+            {t("clear")}
           </button>
         </div>
 
@@ -161,8 +176,8 @@ function App() {
             </div>
             <div className="status-summary">
               {progress === 100 && !isConverting 
-                ? `Conversion complete: ${successCount} successful, ${errors.length} failed`
-                : `Processing... ${progress}%`
+                ? t("complete_summary", { success: successCount, failed: errors.length })
+                : t("processing", { progress })
               }
             </div>
           </div>
@@ -188,7 +203,7 @@ function App() {
                   download={result.name} 
                   className="download-link"
                 >
-                  Download
+                  {t("download")}
                 </a>
               </li>
             ))}
@@ -198,7 +213,7 @@ function App() {
 
       <footer style={{ marginTop: "2rem", fontSize: "0.8rem", color: "#666" }}>
         <p>
-          Made by <a href="https://kageryo.coderyo.com" target="_blank" rel="noopener noreferrer" style={{ color: "inherit", textDecoration: "underline" }}>Chien-Hsun Chang</a> With ♥, MIT License
+          {t("footer_made_by")} <a href="https://kageryo.coderyo.com" target="_blank" rel="noopener noreferrer" style={{ color: "inherit", textDecoration: "underline" }}>Chien-Hsun Chang</a> {t("footer_with")} ♥, {t("footer_license")}
         </p>
       </footer>
     </div>
