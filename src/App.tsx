@@ -197,7 +197,9 @@ function App() {
       </main>
 
       <footer style={{ marginTop: "2rem", fontSize: "0.8rem", color: "#666" }}>
-        <p>Built with privacy in mind. Powered by WASM.</p>
+        <p>
+          Made by <a href="https://kageryo.coderyo.com" target="_blank" rel="noopener noreferrer" style={{ color: "inherit", textDecoration: "underline" }}>Chien-Hsun Chang</a> With ♥, MIT License
+        </p>
       </footer>
     </div>
   );
