@@ -20,10 +20,7 @@ const resources = {
       processing: "Processing... {{progress}}%",
       complete_summary: "Conversion complete: {{success}} successful, {{failed}} failed",
       download: "Download",
-      unsupported_skipped: "{{count}} unsupported files skipped. Only .heic and .heif are supported.",
-      footer_made_by: "Made by",
-      footer_with: "With",
-      footer_license: "MIT License"
+      unsupported_skipped: "{{count}} unsupported files skipped. Only .heic and .heif are supported."
     }
   },
   "zh-TW": {
@@ -43,10 +40,7 @@ const resources = {
       processing: "處理中... {{progress}}%",
       complete_summary: "轉檔完成：{{success}} 成功，{{failed}} 失敗",
       download: "下載",
-      unsupported_skipped: "已跳過 {{count}} 個不支援的檔案。僅支援 .heic 與 .heif 格式。",
-      footer_made_by: "由",
-      footer_with: "製作，使用",
-      footer_license: "MIT 授權"
+      unsupported_skipped: "已跳過 {{count}} 個不支援的檔案。僅支援 .heic 與 .heif 格式。"
     }
   }
 };

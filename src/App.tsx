@@ -213,7 +213,7 @@ function App() {
 
       <footer style={{ marginTop: "2rem", fontSize: "0.8rem", color: "#666" }}>
         <p>
-          {t("footer_made_by")} <a href="https://kageryo.coderyo.com" target="_blank" rel="noopener noreferrer" style={{ color: "inherit", textDecoration: "underline" }}>Chien-Hsun Chang</a> {t("footer_with")} ♥, {t("footer_license")}
+          Made by <a href="https://kageryo.coderyo.com" target="_blank" rel="noopener noreferrer" style={{ color: "inherit", textDecoration: "underline" }}>Chien-Hsun Chang</a> With ♥, MIT License
         </p>
       </footer>
     </div>
