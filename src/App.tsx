@@ -93,7 +93,7 @@ function App() {
             style={{ padding: "0.4rem", borderRadius: "4px", border: "1px solid #ccc" }}
           >
             <option value="en">English</option>
-            <option value="zh-TW">繁體中文</option>
+            <option value="zh-TW">正體中文</option>
           </select>
         </div>
       </header>
