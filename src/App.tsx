@@ -78,25 +78,23 @@ function App() {
     }
   };
 
-  const toggleLanguage = () => {
-    const nextLang = i18n.language === "en" ? "zh-TW" : "en";
-    i18n.changeLanguage(nextLang);
+  const changeLanguage = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    i18n.changeLanguage(e.target.value);
   };
 
   return (
     <div className="container">
       <header>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <h1>{t("title")}</h1>
-          <button 
-            onClick={toggleLanguage} 
-            style={{ padding: "0.4rem 0.8rem", fontSize: "0.8rem", backgroundColor: "#f0f0f0", color: "#333" }}
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
+          <h1 style={{ margin: 0 }}>HEIC Converter</h1>
+          <select 
+            value={i18n.language} 
+            onChange={changeLanguage}
+            style={{ padding: "0.4rem", borderRadius: "4px", border: "1px solid #ccc" }}
           >
-            {i18n.language === "en" ? "繁體中文" : "English"}
-          </button>
-        </div>
-        <div className="privacy-note">
-          <strong>{t("privacy_note")}</strong> {t("privacy_desc")}
+            <option value="en">English</option>
+            <option value="zh-TW">繁體中文</option>
+          </select>
         </div>
       </header>
 

@@ -5,9 +5,6 @@ import LanguageDetector from "i18next-browser-languagedetector";
 const resources = {
   en: {
     translation: {
-      title: "HEIC Converter",
-      privacy_note: "Privacy First:",
-      privacy_desc: "All conversions happen locally in your browser. No images are uploaded to any server.",
       select_files: "Select HEIC/HEIF Files",
       drop_hint: "Click to select or drag and drop .heic / .heif files",
       files_selected: "{{count}} file(s) selected",
@@ -25,9 +22,6 @@ const resources = {
   },
   "zh-TW": {
     translation: {
-      title: "HEIC 轉檔器",
-      privacy_note: "隱私優先：",
-      privacy_desc: "所有轉檔程序皆在您的瀏覽器中本地執行，圖片不會上傳到任何伺服器。",
       select_files: "選擇 HEIC/HEIF 檔案",
       drop_hint: "點擊選擇或拖放 .heic / .heif 檔案",
       files_selected: "已選擇 {{count}} 個檔案",
