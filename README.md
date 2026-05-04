@@ -20,7 +20,7 @@ This app performs all image conversion locally in your browser. Your images are 
 - **Vite**: Build tool and dev server
 - **React**: UI framework
 - **TypeScript**: Static typing
-- **heic2any**: HEIC/HEIF decoder (WASM-based)
+- **heic-decode**: HEIC/HEIF decoder (WASM-based)
 - **GitHub Actions**: Automated deployment
 
 ## Local Development

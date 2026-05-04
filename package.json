@@ -10,12 +10,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "heic2any": "^0.0.4",
+    "heic-decode": "^2.1.0",
     "react": "^19.2.5",
     "react-dom": "^19.2.5"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@types/heic-decode": "^2.0.0",
     "@types/node": "^24.12.2",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
