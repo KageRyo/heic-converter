@@ -112,12 +112,12 @@ function App() {
   return (
     <div className="container">
       <header>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
+        <div className="header-content">
           <h1 style={{ margin: 0 }}>HEIC Converter</h1>
           <select 
             value={i18n.language} 
             onChange={changeLanguage}
-            style={{ padding: "0.4rem", borderRadius: "4px", border: "1px solid #ccc" }}
+            className="lang-select"
           >
             <option value="en">English</option>
             <option value="zh-TW">正體中文</option>
@@ -194,7 +194,7 @@ function App() {
           <button 
             onClick={clearAll} 
             disabled={isConverting || (files.length === 0 && results.length === 0)}
-            style={{ marginLeft: "1rem", backgroundColor: "#6c757d" }}
+            className="clear-btn"
           >
             {t("clear")}
           </button>
