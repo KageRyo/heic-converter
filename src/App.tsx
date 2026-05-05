@@ -9,7 +9,7 @@ function App() {
   const { t, i18n } = useTranslation();
   const [files, setFiles] = useState<File[]>([]);
   const [format, setFormat] = useState<OutputFormat>("image/jpeg");
-  const [quality, setQuality] = useState<number>(0.9);
+  const [quality, setQuality] = useState<number>(1.0);
   const [results, setResults] = useState<ConversionResult[]>([]);
   const [isConverting, setIsConverting] = useState(false);
   const [isZipping, setIsZipping] = useState(false);
@@ -163,7 +163,13 @@ function App() {
 
           {format === "image/jpeg" && (
             <div className="control-group">
-              <label htmlFor="quality">{t("jpg_quality", { quality: quality.toFixed(1) })}</label>
+              <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                <label htmlFor="quality">{t("jpg_quality", { quality: quality.toFixed(1) })}</label>
+                <div className="tooltip-container">
+                  <span className="info-icon">ⓘ</span>
+                  <div className="tooltip-text">{t("quality_hint")}</div>
+                </div>
+              </div>
               <input 
                 id="quality"
                 type="range" 
