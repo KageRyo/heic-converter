@@ -3,6 +3,7 @@ import "./App.css";
 import { convertHeic } from "./converter";
 import type { OutputFormat, ConversionResult } from "./converter";
 import { useTranslation } from "react-i18next";
+import JSZip from "jszip";
 
 function App() {
   const { t, i18n } = useTranslation();
@@ -11,6 +12,7 @@ function App() {
   const [quality, setQuality] = useState<number>(0.9);
   const [results, setResults] = useState<ConversionResult[]>([]);
   const [isConverting, setIsConverting] = useState(false);
+  const [isZipping, setIsZipping] = useState(false);
   const [progress, setProgress] = useState(0);
   const [errors, setErrors] = useState<string[]>([]);
   const [successCount, setSuccessCount] = useState(0);
@@ -67,7 +69,32 @@ function App() {
     setIsConverting(false);
   };
 
+  const downloadAllAsZip = async () => {
+    if (results.length === 0) return;
+    
+    setIsZipping(true);
+    const zip = new JSZip();
+    
+    results.forEach((result) => {
+      zip.file(result.name, result.blob);
+    });
+    
+    const content = await zip.generateAsync({ type: "blob" });
+    const url = URL.createObjectURL(content);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "converted_images.zip";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    setIsZipping(false);
+  };
+
   const clearAll = () => {
+    // Revoke all object URLs to free memory
+    results.forEach(result => URL.revokeObjectURL(result.url));
+    
     setFiles([]);
     setResults([]);
     setErrors([]);
@@ -192,20 +219,37 @@ function App() {
         )}
 
         {results.length > 0 && (
-          <ul className="results-list">
-            {results.map((result, index) => (
-              <li key={index} className="result-item">
-                <span className="result-name">{result.name}</span>
-                <a 
-                  href={result.url} 
-                  download={result.name} 
-                  className="download-link"
+          <div className="results-container">
+            <ul className="results-list">
+              {results.map((result, index) => (
+                <li key={index} className="result-item">
+                  <div className="result-info">
+                    <img src={result.url} alt={result.name} className="result-thumbnail" />
+                    <span className="result-name">{result.name}</span>
+                  </div>
+                  <a 
+                    href={result.url} 
+                    download={result.name} 
+                    className="download-link"
+                  >
+                    {t("download")}
+                  </a>
+                </li>
+              ))}
+            </ul>
+            
+            {results.length > 1 && (
+              <div className="batch-actions">
+                <button 
+                  onClick={downloadAllAsZip} 
+                  disabled={isZipping}
+                  className="download-all-btn"
                 >
-                  {t("download")}
-                </a>
-              </li>
-            ))}
-          </ul>
+                  {isZipping ? t("converting") : t("download_all")}
+                </button>
+              </div>
+            )}
+          </div>
         )}
       </main>
 

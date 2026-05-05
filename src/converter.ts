@@ -1,5 +1,3 @@
-import decode from "heic-decode";
-
 export type OutputFormat = "image/jpeg" | "image/png";
 
 export interface ConversionOptions {
@@ -13,49 +11,39 @@ export interface ConversionResult {
   url: string;
 }
 
+/**
+ * Offloads HEIC conversion to a Web Worker to keep the UI responsive.
+ */
 export async function convertHeic(
   file: File,
   options: ConversionOptions
 ): Promise<ConversionResult> {
-  const { format, quality } = options;
-
-  try {
-    const buffer = await file.arrayBuffer();
-    const { width, height, data } = await decode({ buffer: new Uint8Array(buffer) });
-
-    const canvas = document.createElement("canvas");
-    canvas.width = width;
-    canvas.height = height;
-    const ctx = canvas.getContext("2d");
-
-    if (!ctx) {
-      throw new Error("Could not create canvas context");
-    }
-
-    const imageData = new ImageData(new Uint8ClampedArray(data), width, height);
-    ctx.putImageData(imageData, 0, 0);
-
-    return new Promise((resolve, reject) => {
-      canvas.toBlob(
-        (blob) => {
-          if (blob) {
-            const newName = file.name.replace(/\.(heic|heif)$/i, format === "image/jpeg" ? ".jpg" : ".png");
-            const url = URL.createObjectURL(blob);
-            resolve({
-              blob,
-              name: newName,
-              url,
-            });
-          } else {
-            reject(new Error("Canvas toBlob failed"));
-          }
-        },
-        format,
-        format === "image/jpeg" ? quality : undefined
-      );
+  return new Promise((resolve, reject) => {
+    // Vite handles this syntax to bundle the worker correctly
+    const worker = new Worker(new URL("./worker.ts", import.meta.url), {
+      type: "module",
     });
-  } catch (error) {
-    console.error("Conversion failed:", error);
-    throw new Error(`Failed to convert ${file.name}: ${(error as Error).message}`);
-  }
+
+    worker.onmessage = (e) => {
+      const { success, blob, name, error } = e.data;
+      if (success) {
+        const url = URL.createObjectURL(blob);
+        resolve({ blob, name, url });
+      } else {
+        reject(new Error(error || "Unknown worker error"));
+      }
+      worker.terminate();
+    };
+
+    worker.onerror = (e) => {
+      reject(new Error(e.message));
+      worker.terminate();
+    };
+
+    worker.postMessage({
+      file,
+      format: options.format,
+      quality: options.quality,
+    });
+  });
 }

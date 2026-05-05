@@ -17,6 +17,7 @@ const resources = {
       processing: "Processing... {{progress}}%",
       complete_summary: "Conversion complete: {{success}} successful, {{failed}} failed",
       download: "Download",
+      download_all: "Download All as ZIP",
       unsupported_skipped: "{{count}} unsupported files skipped. Only .heic and .heif are supported."
     }
   },
@@ -34,6 +35,7 @@ const resources = {
       processing: "處理中... {{progress}}%",
       complete_summary: "轉檔完成：{{success}} 成功，{{failed}} 失敗",
       download: "下載",
+      download_all: "下載全部 (ZIP)",
       unsupported_skipped: "已跳過 {{count}} 個不支援的檔案。僅支援 .heic 與 .heif 格式。"
     }
   }
