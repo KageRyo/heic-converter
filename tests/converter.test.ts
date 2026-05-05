@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { convertHeic } from './converter';
+import { convertHeic } from '../src/converter';
 
 describe('converter logic', () => {
   it('should convert heic to jpg name correctly', async () => {
