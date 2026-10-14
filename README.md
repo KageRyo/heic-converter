@@ -58,7 +58,7 @@ The app is configured for GitHub Pages.
 - Large images may take time or use a lot of memory due to browser-side processing.
 - Metadata such as EXIF/GPS may not be fully preserved.
 - Browser performance may vary depending on the hardware and complexity of the image.
-- HEIC decoding depends on the `heic2any` library and WASM performance.
+- HEIC decoding depends on the `heic-decode` library and WASM performance.
 
 ## License
 
