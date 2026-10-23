@@ -1,19 +1,32 @@
-import { describe, it, expect } from 'vitest';
+import { afterEach, describe, it, expect, vi } from 'vitest';
 import { convertHeic } from '../src/converter';
 
-describe('converter logic', () => {
-  it('should convert heic to jpg name correctly', async () => {
-    const file = new File([''], 'test.heic', { type: 'image/heic' });
-    const result = await convertHeic(file, { format: 'image/jpeg', quality: 0.9 });
-    
-    expect(result.name).toBe('test.jpg');
-    expect(result.url).toBe('mock-url');
-  });
+afterEach(() => vi.unstubAllGlobals());
 
-  it('should convert heic to png name correctly', async () => {
-    const file = new File([''], 'test.heif', { type: 'image/heif' });
-    const result = await convertHeic(file, { format: 'image/png' });
-    
-    expect(result.name).toBe('test.png');
+describe('conversion worker communication', () => {
+  it('forwards conversion options and returns the worker output', async () => {
+    const worker = {
+      onmessage: null as ((event: MessageEvent) => void) | null,
+      onerror: null as ((event: ErrorEvent) => void) | null,
+      postMessage: vi.fn(),
+      terminate: vi.fn(),
+    };
+    vi.stubGlobal('Worker', vi.fn(function () { return worker; }));
+    const file = new File([''], 'input.heic', { type: 'image/heic' });
+    const blob = new Blob(['worker output'], { type: 'image/jpeg' });
+    const conversion = convertHeic(file, { format: 'image/jpeg', quality: 0.9 });
+
+    expect(worker.postMessage).toHaveBeenCalledWith({
+      file, format: 'image/jpeg', quality: 0.9,
+    });
+    worker.onmessage!({
+      data: { success: true, blob, name: 'worker-selected-name.jpg' },
+    } as MessageEvent);
+
+    expect(await conversion).toEqual({
+      blob, name: 'worker-selected-name.jpg', url: 'mock-url',
+    });
+    expect(URL.createObjectURL).toHaveBeenCalledWith(blob);
+    expect(worker.terminate).toHaveBeenCalledOnce();
   });
 });
